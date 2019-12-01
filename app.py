@@ -40,6 +40,6 @@ for e in pubsub.events():
     # con.commit()
     print(e.payload.encode())
     # saving in file log.txt
-    f = open(os.path.join(path, filename), "w+")
-    f.write(dt+" "+str(e.payload.encode())+'\n')
+    f = open(os.path.join(path, filename), "a")
+    f.write(dt+" "+str(e.payload.encode())+"\n")
     f.close()
