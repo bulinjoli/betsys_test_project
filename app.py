@@ -20,34 +20,26 @@ pubsub = pgpubsub.connect(user = "postgres",
                       database = "postgres")
 
 
-path = "/home/user/test_project"
+path = os.path.dirname(os.path.abspath(__file__))
 
 if not os.path.exists(path):
     os.makedirs(path)
 
 filename = 'log.txt'
 
-try:
-    while True:
-        pubsub.listen('item_change')
-        print(pubsub.events())
-        for e in pubsub.events():
-            # updating logged_at
-            # cursor = con.cursor()
-            # update_table_query = '''update item
-            #                         set logged_at=now()
-            #                         where
-            #                         id=1;'''
-            #
-            # cursor.execute(update_table_query)
-            # con.commit()
-            # cursor.close()
-            # con.close()
-            print(e.payload.encode())
-            f = open(os.path.join(path, filename), "w+")
-            f.write(dt+" "+str(e.payload.encode())+'\n')
-            f.close()
-
-
-except KeyboardInterrupt:
-    pass
+pubsub.listen('item_change')
+for e in pubsub.events():
+    # updating logged_at, doesnt work because of connection issues
+    # cursor = con.cursor()
+    # update_table_query = '''update item
+    #                         set logged_at=now()
+    #                         where
+    #                         id=1;'''
+    #
+    # cursor.execute(update_table_query)
+    # con.commit()
+    print(e.payload.encode())
+    # saving in file log.txt
+    f = open(os.path.join(path, filename), "w+")
+    f.write(dt+" "+str(e.payload.encode())+'\n')
+    f.close()
