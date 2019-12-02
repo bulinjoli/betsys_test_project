@@ -28,18 +28,26 @@ if not os.path.exists(path):
 filename = 'log.txt'
 
 pubsub.listen('item_change')
-for e in pubsub.events():
-    # updating logged_at, doesnt work because of connection issues
-    # cursor = con.cursor()
-    # update_table_query = '''update item
-    #                         set logged_at=now()
-    #                         where
-    #                         id=1;'''
-    #
-    # cursor.execute(update_table_query)
-    # con.commit()
-    print(e.payload.encode())
-    # saving in file log.txt
-    f = open(os.path.join(path, filename), "a")
-    f.write(dt+" "+str(e.payload.encode())+"\n")
-    f.close()
+try:
+    for e in pubsub.events():
+
+        print(e.payload.encode())
+        # saving in file log.txt
+        f = open(os.path.join(path, filename), "a")
+        f.write(dt+" "+str(e.payload.encode())+"\n")
+        f.close()
+
+        # updating logged_at, doesnt work because of connection issues
+        # cursor = con.cursor()
+        # update_table_query = '''update item
+        #                             set logged_at=now()
+        #                             where
+        #                             id=1;'''
+        #
+        # cursor.execute(update_table_query)
+        # con.commit()
+        # cursor.close()
+except KeyboardInterrupt:
+        print('Exit')
+        pass
+
