@@ -30,7 +30,6 @@ filename = 'log.txt'
 pubsub.listen('item_change')
 try:
     for e in pubsub.events():
-
         print(e.payload.encode())
         # saving in file log.txt
         f = open(os.path.join(path, filename), "a")
@@ -38,15 +37,16 @@ try:
         f.close()
 
         # updating logged_at, doesnt work because of connection issues
-        # cursor = con.cursor()
-        # update_table_query = '''update item
-        #                             set logged_at=now()
-        #                             where
-        #                             id=1;'''
-        #
-        # cursor.execute(update_table_query)
-        # con.commit()
-        # cursor.close()
+        pubsub.unlisten('item_change')
+        cursor = con.cursor()
+        update_table_query = '''update item
+                                set logged_at=now()
+                                where id=1;'''
+
+        cursor.execute(update_table_query)
+        con.commit()
+        cursor.close()
+        pubsub.listen('item_change')
 except KeyboardInterrupt:
         print('Exit')
         pass
